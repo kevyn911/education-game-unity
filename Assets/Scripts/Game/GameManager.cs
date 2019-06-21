@@ -16,6 +16,13 @@ namespace Game
         private GameSceneManager currentGameSceneManager;
         private Rules rules;
         private List<Thing> things;
+        private GameObject content;
+        
+        [Range(1,50)]
+        [Header("Controllers")]
+        [SerializeField] private int panCount;
+        [Header("GameObjects")]
+        [SerializeField] private GameObject panPrefab;
         
         private void Awake()
         {
@@ -60,17 +67,18 @@ namespace Game
         private void LoadThings()
         {
             //Image[] thingsArr;
-            int sizeThings = currentGameSceneManager.Things.Length, rand;
+//            int sizeThings = currentGameSceneManager.Things.Length, rand;
+//            
+//            currentGameSceneManager.Canvas.gameObject.SetActive(true);
+//            things = new List<Thing>(rules.Things);
+//
+//            for (int i = 0; i < sizeThings; i++)
+//            {
+//                rand = Random.Range(0, things.Count);
+//                currentGameSceneManager.Things[i].sprite = things[rand].sprite;
+//                things.RemoveAt(rand);
+//            }
             
-            currentGameSceneManager.Canvas.gameObject.SetActive(true);
-            things = new List<Thing>(rules.Things);
-
-            for (int i = 0; i < sizeThings; i++)
-            {
-                rand = Random.Range(0, things.Count);
-                currentGameSceneManager.Things[i].sprite = things[rand].sprite;
-                things.RemoveAt(rand);
-            }
         }
         
         
