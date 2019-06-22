@@ -653,7 +653,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1184923484}
   m_HandleRect: {fileID: 1184923483}
   m_Direction: 0
-  m_Value: 0.5
+  m_Value: 0.50004697
   m_Size: 0.9992868
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -824,6 +824,10 @@ MonoBehaviour:
   offset: 300
   panPrefab: {fileID: 4627917507122375935, guid: aaabb5210ed075641a638f45594e7050,
     type: 3}
+  magnetSpeed: 8
+  scaleOffset: 2
+  scaleSpeed: 10.7
+  scrollRect: {fileID: 1055916574}
 --- !u!1 &1055916570
 GameObject:
   m_ObjectHideFlags: 0
@@ -1603,6 +1607,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1832481959}
   m_CullTransparentMesh: 0
+--- !u!1 &1941086007
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1941086009}
+  - component: {fileID: 1941086008}
+  m_Layer: 0
+  m_Name: SwipeController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1941086008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1941086007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d393be0e8d7890e46947e653c997aba5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deadzone: 100
+  doubleTapDelta: 0.5
+--- !u!4 &1941086009
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1941086007}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1985292880
 GameObject:
   m_ObjectHideFlags: 0

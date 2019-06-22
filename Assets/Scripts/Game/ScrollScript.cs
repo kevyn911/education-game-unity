@@ -75,11 +75,18 @@ public class ScrollScript : MonoBehaviour
         if (isScrolling || scrollVelocity > 400) return;
         contentVector.x = Mathf.SmoothStep(contentRect.anchoredPosition.x, pansPos[selectedPanelId].x, magnetSpeed * Time.fixedDeltaTime);
         contentRect.anchoredPosition = contentVector;
-    }
 
+        
+    }
+    
     public void Scrolling(bool scroll)
     {
         isScrolling = scroll;
         if (scroll) scrollRect.inertia = true;
+    }
+
+    private void OnSwipeUp()
+    {
+        Debug.Log("Is swiped up");
     }
 }
