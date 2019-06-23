@@ -10,8 +10,8 @@ namespace Game.GameScenes
     {
         [SerializeField] private Rules rules;
         [SerializeField] private Image room;
+        [SerializeField] private Text scoreText;
         
-
         public Rules Rules => rules;
 
         public Image Room
@@ -20,21 +20,11 @@ namespace Game.GameScenes
             set => room = value;
         }
 
-        //Тестове завантаження картинок. Зроби норм.
-        [SerializeField] private Image[] things;
-        [SerializeField] private Canvas canvas;
-        public Image[] Things
+        public Text ScoreText
         {
-            get => things;
-            set => things = value;
+            get => scoreText;
+            set => scoreText = value;
         }
-
-        public Canvas Canvas
-        {
-            get => canvas;
-            set => canvas = value;
-        }
-        // Вот так.
 
         private void Start()
         {

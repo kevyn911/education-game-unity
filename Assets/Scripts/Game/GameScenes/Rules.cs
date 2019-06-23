@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.SymbolStore;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,12 +10,15 @@ namespace Game.GameScenes
     {
         [SerializeField] private Sprite room;
         [SerializeField] private uint timer;
+        [SerializeField] private GameObject panelImage;
+        [SerializeField] private GameObject panelText;
         [SerializeField] private Thing[] things;
 
         public Sprite Room => room;
-
         public uint Timer => timer;
+        public GameObject PanelImage => panelImage;
 
+        public GameObject PanelText => panelText;
         public Thing[] Things => things;
     }
     

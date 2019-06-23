@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Application;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +13,7 @@ public class ScrollScript : MonoBehaviour
     [Range(1, 500)]
     [SerializeField] private int offset;
     [Header("GameObjects")] 
-    [SerializeField] private GameObject panPrefab;
+    //[SerializeField] private GameObject panPrefab;
     [Range(0f, 20f)]
     [SerializeField] private float magnetSpeed;
     [Range(0f, 5f)]
@@ -22,29 +23,85 @@ public class ScrollScript : MonoBehaviour
 
     [SerializeField] private ScrollRect scrollRect;
 
-    private GameObject[] scenePanels;
-    private Vector2[] pansPos;
-    private Vector2[] pansScale;
+    private List<GameObject> scenePanels;
+    private Vector2[] pansPos,pansScale;
     private Vector2 contentVector;
     private RectTransform contentRect;
-    private int selectedPanelId;
+    private int selectedPanelId, t=0;
     private bool isScrolling;
+    private float  panPosY,panLocPosY, panSize;
+    private GameObject panPrefab;
+
+    public GameObject PanPrefab
+    {
+        get => panPrefab;
+        set => panPrefab = value;
+    }
+    public int SelectedPanelId => selectedPanelId;
     
-    void Start()
+    private void Awake()
+    {
+        ApplicationManager.Instance.ScrollScript = this;
+        DeactivateScript();
+    }
+
+    private void Start()
     {
         contentRect = GetComponent<RectTransform>();
-        scenePanels = new GameObject[panCount];
+    }
+
+    public void StartLevel1(List<Sprite> panSprite)
+    {
+        scenePanels = new List<GameObject>();
+        panSize = panPrefab.GetComponent<RectTransform>().sizeDelta.x;
+        panCount = panSprite.Count;
         pansScale = new Vector2[panCount];
         pansPos = new Vector2[panCount];
         for (int i = 0; i < panCount; i++)
         {
-            scenePanels[i] = Instantiate(panPrefab, transform, false);
-            if(i==0) continue;
+            panPrefab.transform.Find("ImageC").GetComponent<Image>().sprite = panSprite[i];
+            InstPanel(panPrefab,i);
+        }
+    }
+    
+    public void StartLevel2(List<String> panText)
+    {
+        scenePanels = new List<GameObject>();
+        panSize = panPrefab.GetComponent<RectTransform>().sizeDelta.x;
+        panCount = panText.Count;
+        pansScale = new Vector2[panCount];
+        pansPos = new Vector2[panCount];
+        for (int i = 0; i < panCount; i++)
+        {
+            panPrefab.transform.Find("Text").GetComponent<Text>().text = panText[i];
+            InstPanel(panPrefab,i);
+        }
+    }
+
+    private void InstPanel(GameObject panel, int i)
+    {
+        scenePanels.Add(Instantiate(panel, transform, false));
+        if (i == 0)
+        {
+            panLocPosY = scenePanels[0].transform.localPosition.y;
+            panPosY = scenePanels[0].transform.position.y;
+        }
+        else
+        {
             scenePanels[i].transform.localPosition = new Vector2(
-                scenePanels[i - 1].transform.localPosition.x + panPrefab.GetComponent<RectTransform>().sizeDelta.x +
-                offset, scenePanels[i].transform.localPosition.y);
+                scenePanels[i - 1].transform.localPosition.x + panSize + offset, panLocPosY);
             pansPos[i] = -scenePanels[i].transform.localPosition;
         }
+    }
+
+    public void ActivateScript()
+    {
+        GetComponent<ScrollScript>().enabled = true;
+    }
+    
+    public void DeactivateScript()
+    {
+        GetComponent<ScrollScript>().enabled = false;
     }
 
     private void FixedUpdate()
@@ -55,6 +112,7 @@ public class ScrollScript : MonoBehaviour
         }
         float nearestPos = float.MaxValue;
         float scale;
+        //panCount = scenePanels.Count;
         for (int i = 0; i < panCount; i++)
         {
             float distance = Math.Abs(contentRect.anchoredPosition.x - pansPos[i].x);
@@ -75,8 +133,6 @@ public class ScrollScript : MonoBehaviour
         if (isScrolling || scrollVelocity > 400) return;
         contentVector.x = Mathf.SmoothStep(contentRect.anchoredPosition.x, pansPos[selectedPanelId].x, magnetSpeed * Time.fixedDeltaTime);
         contentRect.anchoredPosition = contentVector;
-
-        
     }
     
     public void Scrolling(bool scroll)
@@ -85,8 +141,31 @@ public class ScrollScript : MonoBehaviour
         if (scroll) scrollRect.inertia = true;
     }
 
-    private void OnSwipeUp()
+    public void OnSwipeUpDown(float swipeDeltaY, int selPanId)
     {
-        Debug.Log("Is swiped up");
+        if (selPanId != selectedPanelId)
+        {
+            scenePanels[selPanId].transform.position = new Vector2(scenePanels[selPanId].transform.position.x, panPosY);
+            ApplicationManager.Instance.SwipeInput.StartTouch = ApplicationManager.Instance.SwipeInput.SwipeDelta = Vector2.zero;
+            swipeDeltaY = 0f;
+        }
+        scenePanels[selectedPanelId].transform.position = new Vector2(scenePanels[selectedPanelId].transform.position.x, panPosY + swipeDeltaY);
+    }
+
+    public void DelPan(int selPanID)
+    {
+        for (int i = selPanID + 1; i < panCount; i++)
+        {
+            scenePanels[i].transform.localPosition = new Vector2(
+                scenePanels[i ].transform.localPosition.x - panSize - offset, panLocPosY);
+        }
+        Destroy(scenePanels[selPanID]);
+        scenePanels.RemoveAt(selPanID);
+        panCount--;
+    }
+
+    public void DefaultPosPan(int selPanID)
+    {
+        scenePanels[selPanID].transform.localPosition = new Vector2(scenePanels[selPanID].transform.localPosition.x, panLocPosY);
     }
 }

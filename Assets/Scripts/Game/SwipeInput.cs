@@ -1,84 +1,70 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Application;
 
 public class SwipeInput : MonoBehaviour
 {
-    private static SwipeInput instance;
-    public static SwipeInput Instance
+    
+    private Vector2 swipeDelta, startTouch;
+    private int selPanID;
+    private float swipeZone = 300f;
+    
+    public Vector2 SwipeDelta
     {
-        get
-        {
-            if (instance == null)
-            {
-                instance = FindObjectOfType<SwipeInput>();
-                if (instance == null)
-                {
-                    instance = new GameObject("Spawned SwipeInput", typeof(SwipeInput)).GetComponent<SwipeInput>();
-                }
-            }
-
-            return instance;
-        }
-        set
-        {
-            instance = value;
-        }
+        get => swipeDelta;
+        set => swipeDelta = value;
     }
 
-    [Header("Tweaks")]
-    [SerializeField] private float deadzone = 100.0f;
-
-    [Header("Logic")]
-    private bool swipeUp, swipeDown;
-    private Vector2 swipeDelta, startTouch;
-
-    #region Public properties
-    public Vector2 SwipeDelta { get { return swipeDelta; } }
-    public bool SwipeUp { get { return swipeUp; } }
-    public bool SwipeDown { get { return swipeDown; } }
-    #endregion
-
+    public Vector2 StartTouch
+    {
+        get => startTouch;
+        set => startTouch = value;
+    }
+    
+    private void Awake()
+    {
+        ApplicationManager.Instance.SwipeInput = this;
+        DeactivateScript();
+    }
+    
+    public void ActivateScript()
+    {
+        GetComponent<SwipeInput>().enabled = true;
+    }
+    
+    public void DeactivateScript()
+    {
+        GetComponent<SwipeInput>().enabled = false;
+    }
     private void Update()
     {
-        swipeUp = swipeDown = false;
         UpdateStandalone();
     }
+    
 
     private void UpdateStandalone()
     {
         if (Input.GetMouseButtonDown(0))
         {
             startTouch = Input.mousePosition;
+            selPanID = ApplicationManager.Instance.ScrollScript.SelectedPanelId;
         }
         else if (Input.GetMouseButtonUp(0))
         {
+            if(swipeDelta.y > swipeZone)
+                ApplicationManager.Instance.GameManager.OnSwipeUp(selPanID);
+            else if (swipeDelta.y < -swipeZone)
+                ApplicationManager.Instance.GameManager.OnSwipeDown(selPanID);
+            else
+                ApplicationManager.Instance.ScrollScript.OnSwipeUpDown(0f, selPanID);
             startTouch = swipeDelta = Vector2.zero;
         }
-        
-        swipeDelta = Vector2.zero;
 
         if (startTouch != Vector2.zero && Input.GetMouseButton(0))
-            swipeDelta = (Vector2)Input.mousePosition - startTouch;
-        
-        if (swipeDelta.y > deadzone)
         {
-            swipeDelta = (Vector2)Input.mousePosition - startTouch;
-            float x = swipeDelta.x;
-            float y = swipeDelta.y;
-
-            if (Mathf.Abs(x) <= Mathf.Abs(y))
-            {
-                if (y < 0)
-                {
-                    swipeDown = true;
-                }
-                else
-                {
-                    swipeUp = true;  
-                }
-            }
-            startTouch = swipeDelta = Vector2.zero;
+            swipeDelta = (Vector2) Input.mousePosition - startTouch;
+            ApplicationManager.Instance.ScrollScript.OnSwipeUpDown(swipeDelta.y * 1.5f, selPanID);
         }
     }
 }
