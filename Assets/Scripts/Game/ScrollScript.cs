@@ -112,7 +112,6 @@ public class ScrollScript : MonoBehaviour
         }
         float nearestPos = float.MaxValue;
         float scale;
-        //panCount = scenePanels.Count;
         for (int i = 0; i < panCount; i++)
         {
             float distance = Math.Abs(contentRect.anchoredPosition.x - pansPos[i].x);
@@ -157,7 +156,7 @@ public class ScrollScript : MonoBehaviour
         for (int i = selPanID + 1; i < panCount; i++)
         {
             scenePanels[i].transform.localPosition = new Vector2(
-                scenePanels[i ].transform.localPosition.x - panSize - offset, panLocPosY);
+                scenePanels[i].transform.localPosition.x - panSize - offset, panLocPosY);
         }
         Destroy(scenePanels[selPanID]);
         scenePanels.RemoveAt(selPanID);

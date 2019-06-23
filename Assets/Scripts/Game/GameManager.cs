@@ -13,7 +13,6 @@ namespace Game
 {
     public class GameManager : MonoBehaviour
     {
-        public GameSceneManager GameSceneManager { get; set; }
         private GameSceneManager currentGameSceneManager;
         private Rules rules;
         private List<Thing> things,thingsSort;
@@ -21,17 +20,21 @@ namespace Game
         private List<String> panText;
         private List<bool> selectThing;
         private bool level1Bool = true;
-        private int sizeThings, rand, score, maxScore, scoreLevel;
-        private uint sceneCount, curSceneNumber;
+        private int sizeThings, rand, score, maxScore, scoreLevel, curSceneNumber, sceneCount;
+        [SerializeField] private Image room;
+        [SerializeField] private Text scoreText;
+        [SerializeField] private Button startGameButton;
 
         private void Awake()
         {
             ApplicationManager.Instance.GameManager = this;
+            startGameButton.onClick.AddListener(StartButtonClicked);
         }
 
-        private void Start()
+        private void StartButtonClicked()
         {
             LoadScene();
+            startGameButton.gameObject.SetActive(false);
         }
 
         private void LoadScene()
@@ -49,18 +52,17 @@ namespace Game
         
         private void StartGame()
         {
-            if(!rules)
-                rules = currentGameSceneManager.Rules;
+            rules = currentGameSceneManager.Rules;
             StartCoroutine(ViewRoom());
         }
 
         private IEnumerator ViewRoom()
         {
-            currentGameSceneManager.Room.sprite = rules.Room;
-            currentGameSceneManager.Room.gameObject.SetActive(true);
+            room.sprite = rules.Room;
+            room.gameObject.SetActive(true);
             yield return new WaitForSeconds(rules.Timer);
             Load();
-            currentGameSceneManager.Room.gameObject.SetActive(false);
+            room.gameObject.SetActive(false);
             yield return null;
         }
         
@@ -131,7 +133,6 @@ namespace Game
             else
             {
                 ApplicationManager.Instance.ScrollScript.DefaultPosPan(selPanID);
-                Debug.Log(selectThing[selPanID]);
                 if (!selectThing[selPanID])
                 {
                     selectThing[selPanID] = true;
@@ -155,7 +156,6 @@ namespace Game
             else
             {
                 ApplicationManager.Instance.ScrollScript.DefaultPosPan(selPanID);
-                Debug.Log(selectThing[selPanID]);
                 if (!selectThing[selPanID])
                 {
                     selectThing[selPanID] = true;
@@ -172,7 +172,7 @@ namespace Game
             ApplicationManager.Instance.ScrollScript.DeactivateScript();
             ApplicationManager.Instance.SwipeInput.DeactivateScript();
             score += scoreLevel;
-            if(!level1Bool ||  curSceneNumber < sceneCount)
+            if(curSceneNumber < sceneCount || !level1Bool)
                 ScoreText(scoreLevel, sizeThings);
             else if (level1Bool && curSceneNumber == sceneCount)
             {
@@ -180,15 +180,21 @@ namespace Game
                 yield break;
             }
             yield return new WaitForSeconds(5);
-            currentGameSceneManager.ScoreText.gameObject.SetActive(false);
-            StartCoroutine(ViewRoom());
+            scoreText.gameObject.SetActive(false);
+            if (level1Bool)
+            {
+                SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+                LoadScene();
+            }
+            else
+                StartCoroutine(ViewRoom());
             yield return null;
         }
 
         private void ScoreText(int score, int maxScore)
         {
-            currentGameSceneManager.ScoreText.text = score + "/" + maxScore;
-            currentGameSceneManager.ScoreText.gameObject.SetActive(true);
+            scoreText.text = score + "/" + maxScore;
+            scoreText.gameObject.SetActive(true);
         }
     }
 }

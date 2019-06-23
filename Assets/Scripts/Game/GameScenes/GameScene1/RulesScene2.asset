@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2b5210a24c4468b4fa419411eaabdf63, type: 3}
-  m_Name: Rules
+  m_Name: RulesScene2
   m_EditorClassIdentifier: 
-  room: {fileID: 21300000, guid: b4e2b0d2c5190434e9bf0b9720e010b5, type: 3}
+  room: {fileID: 21300000, guid: d9b1eddd470dcf946a27104f520a5fe4, type: 3}
   timer: 5
   panelImage: {fileID: 4627917507122375935, guid: aaabb5210ed075641a638f45594e7050,
     type: 3}
@@ -21,13 +21,13 @@ MonoBehaviour:
   things:
   - thingName: Abba
     correct: 1
-    sprite: {fileID: 21300000, guid: 80379f6035d86da408ebbf8ae8b5c67c, type: 3}
+    sprite: {fileID: 21300000, guid: 21467dbf240974d45a95b812c7228a58, type: 3}
   - thingName: Qwerty
     correct: 0
-    sprite: {fileID: 21300000, guid: fb943b8fba1d1034ba8e2627cc12f5be, type: 3}
+    sprite: {fileID: 21300000, guid: 20d5cd15059e1e143a5603af13820e33, type: 3}
   - thingName: Prosto
     correct: 1
-    sprite: {fileID: 21300000, guid: 8548960c630320145ab1453fd6f59378, type: 3}
+    sprite: {fileID: 21300000, guid: 22f27fb3858d18a448074b113ca86c8e, type: 3}
   - thingName: Tratata
     correct: 0
-    sprite: {fileID: 21300000, guid: b4e2b0d2c5190434e9bf0b9720e010b5, type: 3}
+    sprite: {fileID: 21300000, guid: 4798777817305c149ab2a191bb8babac, type: 3}

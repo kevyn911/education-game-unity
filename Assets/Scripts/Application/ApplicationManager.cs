@@ -11,18 +11,19 @@ namespace Application
         public ScrollScript ScrollScript { get; set; }
         public SwipeInput SwipeInput { get; set; }
         
-        private uint sceneNum = 0;
-        [SerializeField] private uint sceneCount;
+        private int sceneNum = 0;
+        [SerializeField] private int sceneCount;
 
-        public uint SceneCount => sceneCount;
+        public int SceneCount => sceneCount;
 
-        public uint SceneNum => sceneNum;
+        public int SceneNum => sceneNum;
 
         public string GameScene
         {
             get
             {
                 sceneNum++;
+                PlayerPrefs.SetInt("SceneNum", sceneNum-1);
                 return "GameScene" + sceneNum;
             }
         }
@@ -31,6 +32,9 @@ namespace Application
         {
             DontDestroyOnLoad(this);
             Instance = this;
+            //PlayerPrefs.SetInt("SceneNum", 0);
+            if (PlayerPrefs.GetInt("SceneNum") >= 0)
+                sceneNum = PlayerPrefs.GetInt("SceneNum");
         }
 
         private void Start()
