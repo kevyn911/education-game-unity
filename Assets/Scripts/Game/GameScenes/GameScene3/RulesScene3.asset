@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b5210a24c4468b4fa419411eaabdf63, type: 3}
+  m_Name: RulesScene3
+  m_EditorClassIdentifier: 
+  room: {fileID: 21300000, guid: 169a2cc483d04064581d03367be8f8db, type: 3}
+  timer: 5
+  panelImage: {fileID: 4627917507122375935, guid: aaabb5210ed075641a638f45594e7050,
+    type: 3}
+  panelText: {fileID: 4627917507122375935, guid: ac787775ad415ca4e8aeebde70895345,
+    type: 3}
+  things:
+  - thingName: Red car
+    correct: 1
+    sprite: {fileID: 21300000, guid: eac9706c2f389934eb21d06c163819af, type: 3}
+  - thingName: Tractor
+    correct: 1
+    sprite: {fileID: 21300000, guid: d45ac0d668fdbdc44957be4e93be00e4, type: 3}
+  - thingName: Spaceman
+    correct: 1
+    sprite: {fileID: 21300000, guid: fd8d5b03b42e0054f8fccc0c442829d7, type: 3}
+  - thingName: Telescope
+    correct: 1
+    sprite: {fileID: 21300000, guid: 32932a33dd1ef6e4ea0fb7fe85757d04, type: 3}
+  - thingName: Home basketball
+    correct: 1
+    sprite: {fileID: 21300000, guid: 18dc309f7c2656947b8be6137ec9ef42, type: 3}
+  - thingName: Clock
+    correct: 0
+    sprite: {fileID: 21300000, guid: a5163ddf86909164e8bd8f9a87050006, type: 3}
+  - thingName: Guitar
+    correct: 0
+    sprite: {fileID: 21300000, guid: 87179d06338f4c4488bed982d41f40a0, type: 3}
+  - thingName: "\u0421lockwork toy"
+    correct: 0
+    sprite: {fileID: 21300000, guid: 1225beeb503b73947b8ad90d684dea48, type: 3}
+  - thingName: Helicopter
+    correct: 0
+    sprite: {fileID: 21300000, guid: 5632a82f4c0ab254bac136d542faa310, type: 3}
+  - thingName: Teddy bear
+    correct: 0
+    sprite: {fileID: 21300000, guid: a8524e7033fc75b429660e69fb0ce8b7, type: 3}

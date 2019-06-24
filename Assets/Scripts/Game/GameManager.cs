@@ -20,21 +20,33 @@ namespace Game
         private List<String> panText;
         private List<bool> selectThing;
         private bool level1Bool = true;
-        private int sizeThings, rand, score, maxScore, scoreLevel, curSceneNumber, sceneCount;
+        private Image loadingBar;
+        private Transform activeBar;
+        private int sizeThings, rand, score, maxScore, scoreLevel, curSceneNumber, sceneCount, timer;
+        
         [SerializeField] private Image room;
         [SerializeField] private Text scoreText;
         [SerializeField] private Button startGameButton;
+        [SerializeField] private Text gameTitle;
+        [SerializeField] private GameObject timerObj;
+        [SerializeField] private Text timerText;
+        
 
         private void Awake()
         {
             ApplicationManager.Instance.GameManager = this;
             startGameButton.onClick.AddListener(StartButtonClicked);
+            activeBar = timerObj.transform.Find("ActiveBar");
+            loadingBar = activeBar.GetComponent<Image>();
+            
+            
         }
 
         private void StartButtonClicked()
         {
             LoadScene();
             startGameButton.gameObject.SetActive(false);
+            gameTitle.gameObject.SetActive(false);
         }
 
         private void LoadScene()
@@ -56,10 +68,26 @@ namespace Game
             StartCoroutine(ViewRoom());
         }
 
+        private IEnumerator StartTimer()
+        {
+            timer = (int)rules.Timer;
+            timerObj.SetActive(true);
+            while (0 < timer)
+            {
+                timerText.text = timer.ToString();
+                yield return new WaitForSeconds(1);
+                timer--;
+                loadingBar.fillAmount = (float)timer / rules.Timer;
+            }
+
+            timerObj.SetActive(false);
+            yield return null;
+        }
         private IEnumerator ViewRoom()
         {
             room.sprite = rules.Room;
             room.gameObject.SetActive(true);
+            StartCoroutine(StartTimer());
             yield return new WaitForSeconds(rules.Timer);
             Load();
             room.gameObject.SetActive(false);

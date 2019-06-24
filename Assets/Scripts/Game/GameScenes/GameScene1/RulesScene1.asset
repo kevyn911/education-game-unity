@@ -12,22 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b5210a24c4468b4fa419411eaabdf63, type: 3}
   m_Name: RulesScene1
   m_EditorClassIdentifier: 
-  room: {fileID: 21300000, guid: b4e2b0d2c5190434e9bf0b9720e010b5, type: 3}
+  room: {fileID: 21300000, guid: 127464089ff55c940b005e3eecc2417f, type: 3}
   timer: 5
   panelImage: {fileID: 4627917507122375935, guid: aaabb5210ed075641a638f45594e7050,
     type: 3}
   panelText: {fileID: 4627917507122375935, guid: ac787775ad415ca4e8aeebde70895345,
     type: 3}
   things:
-  - thingName: Abba
+  - thingName: Spaceman
     correct: 1
-    sprite: {fileID: 21300000, guid: 80379f6035d86da408ebbf8ae8b5c67c, type: 3}
-  - thingName: Qwerty
-    correct: 0
-    sprite: {fileID: 21300000, guid: fb943b8fba1d1034ba8e2627cc12f5be, type: 3}
-  - thingName: Prosto
+    sprite: {fileID: 21300000, guid: 1c5bbd77f60000a439662c7bd8e856f1, type: 3}
+  - thingName: Game pistol
     correct: 1
-    sprite: {fileID: 21300000, guid: 8548960c630320145ab1453fd6f59378, type: 3}
-  - thingName: Tratata
+    sprite: {fileID: 21300000, guid: 581293ba36f52fd45880963a96474fdb, type: 3}
+  - thingName: Rocket
+    correct: 1
+    sprite: {fileID: 21300000, guid: 985d553a3bc7e92498f7f613d2ae08a6, type: 3}
+  - thingName: Dishes with apples
     correct: 0
-    sprite: {fileID: 21300000, guid: b4e2b0d2c5190434e9bf0b9720e010b5, type: 3}
+    sprite: {fileID: 21300000, guid: 7dc4ff14392357c4eb6cefd1725de5ff, type: 3}
+  - thingName: Speaker
+    correct: 0
+    sprite: {fileID: 21300000, guid: e2eac94774654144cb03a326e5f50277, type: 3}
+  - thingName: Gamer chair
+    correct: 0
+    sprite: {fileID: 21300000, guid: 21901297c2b4d8846b44ad55ae5d1f7b, type: 3}

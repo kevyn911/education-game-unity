@@ -64,7 +64,7 @@ public class SwipeInput : MonoBehaviour
         if (startTouch != Vector2.zero && Input.GetMouseButton(0))
         {
             swipeDelta = (Vector2) Input.mousePosition - startTouch;
-            ApplicationManager.Instance.ScrollScript.OnSwipeUpDown(swipeDelta.y * 1.5f, selPanID);
+            ApplicationManager.Instance.ScrollScript.OnSwipeUpDown(swipeDelta.y * 2f, selPanID);
         }
     }
 }

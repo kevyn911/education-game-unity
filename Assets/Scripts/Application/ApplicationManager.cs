@@ -32,7 +32,7 @@ namespace Application
         {
             DontDestroyOnLoad(this);
             Instance = this;
-            //PlayerPrefs.SetInt("SceneNum", 0);
+            PlayerPrefs.SetInt("SceneNum", 0);
             if (PlayerPrefs.GetInt("SceneNum") >= 0)
                 sceneNum = PlayerPrefs.GetInt("SceneNum");
         }
