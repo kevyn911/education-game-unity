@@ -31,6 +31,7 @@ namespace Game
         [SerializeField] private GameObject timerObj;
         [SerializeField] private Text timerText;
         [SerializeField] private GameObject gg;
+        [SerializeField] private Animator animatorController;
         
 
         private void Awake()
@@ -116,7 +117,8 @@ namespace Game
 
             level1Bool = !level1Bool;
             scrollScript.ActivateScript();
-            swipeScript.ActivateScript();
+            swipeScript.ActivateScript(); 
+            animatorController.SetBool("isStartSwipeHelp", true);
         }
 
 
@@ -166,7 +168,7 @@ namespace Game
                 ScoreText(score, maxScore);
                 yield break;
             }
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(3);
             scoreText.gameObject.SetActive(false);
             if (level1Bool)
             {

@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   room: {fileID: 21300000, guid: 169a2cc483d04064581d03367be8f8db, type: 3}
   timer: 5
-  panelImage: {fileID: 4627917507122375935, guid: aaabb5210ed075641a638f45594e7050,
+  panelImage: {fileID: 8841496986047449623, guid: aaabb5210ed075641a638f45594e7050,
     type: 3}
-  panelText: {fileID: 4627917507122375935, guid: ac787775ad415ca4e8aeebde70895345,
+  panelText: {fileID: 8937019694460268338, guid: ac787775ad415ca4e8aeebde70895345,
     type: 3}
   things:
   - thingName: Red car
