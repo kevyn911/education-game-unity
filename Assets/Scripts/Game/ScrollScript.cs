@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Application;
+using Game.GameScenes;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,8 +14,7 @@ public class ScrollScript : MonoBehaviour
     [SerializeField] private int panCount;
     [Range(1, 500)]
     [SerializeField] private int offset;
-    [Header("GameObjects")] 
-    //[SerializeField] private GameObject panPrefab;
+    [Header("GameObjects")]
     [Range(0f, 20f)]
     [SerializeField] private float magnetSpeed;
     [Range(0f, 5f)]
@@ -23,22 +24,21 @@ public class ScrollScript : MonoBehaviour
 
     [SerializeField] private ScrollRect scrollRect;
 
-    private List<GameObject> scenePanels;
-    private Vector2[] pansPos,pansScale;
+    private List<Panel> scenePanels = new List<Panel>();
+    private List<Vector2> pansPos;
     private Vector2 contentVector;
     private RectTransform contentRect;
     private int selectedPanelId, t=0;
     private bool isScrolling;
-    private float  panPosY,panLocPosY, panSize;
-    private GameObject panPrefab;
-
-    public GameObject PanPrefab
-    {
-        get => panPrefab;
-        set => panPrefab = value;
-    }
+    private float panPosY,panLocPosY, panSize;
     public int SelectedPanelId => selectedPanelId;
-    
+
+    public List<Panel> ScenePanels
+    {
+        get => scenePanels;
+        set => scenePanels = value;
+    }
+
     private void Awake()
     {
         ApplicationManager.Instance.ScrollScript = this;
@@ -50,48 +50,29 @@ public class ScrollScript : MonoBehaviour
         contentRect = GetComponent<RectTransform>();
     }
 
-    public void StartLevel1(List<Sprite> panSprite)
+    public void InitLists()
     {
-        scenePanels = new List<GameObject>();
-        panSize = panPrefab.GetComponent<RectTransform>().sizeDelta.x;
-        panCount = panSprite.Count;
-        pansScale = new Vector2[panCount];
-        pansPos = new Vector2[panCount];
-        for (int i = 0; i < panCount; i++)
-        {
-            panPrefab.transform.Find("ImageC").GetComponent<Image>().sprite = panSprite[i];
-            InstPanel(panPrefab,i);
-        }
-    }
-    
-    public void StartLevel2(List<String> panText)
-    {
-        scenePanels = new List<GameObject>();
-        panSize = panPrefab.GetComponent<RectTransform>().sizeDelta.x;
-        panCount = panText.Count;
-        pansScale = new Vector2[panCount];
-        pansPos = new Vector2[panCount];
-        for (int i = 0; i < panCount; i++)
-        {
-            panPrefab.transform.Find("Text").GetComponent<Text>().text = panText[i];
-            InstPanel(panPrefab,i);
-        }
+        pansPos = new List<Vector2>();
     }
 
-    private void InstPanel(GameObject panel, int i)
+    public void InstPanel(Panel panel, Thing thing)
     {
         scenePanels.Add(Instantiate(panel, transform, false));
-        if (i == 0)
+        scenePanels.Last().Show(thing);
+        scenePanels.Last().Thing.SelBool = false;
+        panCount = scenePanels.Count;
+        if (panCount == 1)
         {
             panLocPosY = scenePanels[0].transform.localPosition.y;
             panPosY = scenePanels[0].transform.position.y;
+            panSize = scenePanels[0].GetComponent<RectTransform>().sizeDelta.x;
         }
         else
         {
-            scenePanels[i].transform.localPosition = new Vector2(
-                scenePanels[i - 1].transform.localPosition.x + panSize + offset, panLocPosY);
-            pansPos[i] = -scenePanels[i].transform.localPosition;
+            scenePanels[panCount - 1].transform.localPosition = new Vector2(
+                scenePanels[panCount - 2].transform.localPosition.x + panSize + offset, panLocPosY);
         }
+        pansPos.Add(-scenePanels.Last().transform.localPosition);
     }
 
     public void ActivateScript()
@@ -106,7 +87,7 @@ public class ScrollScript : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (contentRect.anchoredPosition.x >= pansPos[0].x && !isScrolling || contentRect.anchoredPosition.x <= pansPos[pansPos.Length - 1].x && !isScrolling)
+        if (contentRect.anchoredPosition.x >= pansPos[0].x && !isScrolling || contentRect.anchoredPosition.x <= pansPos.Last().x && !isScrolling)
         {
             scrollRect.inertia = false;
         }
@@ -122,9 +103,9 @@ public class ScrollScript : MonoBehaviour
             }
 
             scale = Mathf.Clamp(1 / (distance / offset) * scaleOffset, 0.5f, 1f);
-            pansScale[i].x = Mathf.SmoothStep(scenePanels[i].transform.localScale.x, scale, scaleSpeed * Time.fixedDeltaTime);
-            pansScale[i].y = Mathf.SmoothStep(scenePanels[i].transform.localScale.y, scale, scaleSpeed * Time.fixedDeltaTime);
-            scenePanels[i].transform.localScale = pansScale[i];
+            scenePanels[i].transform.localScale = new Vector2(
+                Mathf.SmoothStep(scenePanels[i].transform.localScale.x, scale, scaleSpeed * Time.fixedDeltaTime),
+                Mathf.SmoothStep(scenePanels[i].transform.localScale.y, scale, scaleSpeed * Time.fixedDeltaTime));
         }
 
         float scrollVelocity = Math.Abs(scrollRect.velocity.x);
@@ -158,7 +139,7 @@ public class ScrollScript : MonoBehaviour
             scenePanels[i].transform.localPosition = new Vector2(
                 scenePanels[i].transform.localPosition.x - panSize - offset, panLocPosY);
         }
-        Destroy(scenePanels[selPanID]);
+        Destroy(scenePanels[selPanID].gameObject);
         scenePanels.RemoveAt(selPanID);
         panCount--;
     }

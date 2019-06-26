@@ -1153,7 +1153,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1241597741}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 97a7d8645001abb419cac38ce9b986fc, type: 3}
@@ -1550,6 +1550,7 @@ MonoBehaviour:
   gameTitle: {fileID: 213021440}
   timerObj: {fileID: 2043986485}
   timerText: {fileID: 1378095321}
+  gg: {fileID: 4627917507122375935, guid: aaabb5210ed075641a638f45594e7050, type: 3}
 --- !u!20 &1453433700
 Camera:
   m_ObjectHideFlags: 0
@@ -1847,7 +1848,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1773998830}
   m_HandleRect: {fileID: 1773998829}
   m_Direction: 2
-  m_Value: 0.4999858
+  m_Value: 0.5000142
   m_Size: 0.9962113
   m_NumberOfSteps: 0
   m_OnValueChanged:

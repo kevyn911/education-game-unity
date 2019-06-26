@@ -15,31 +15,36 @@ namespace Game
     {
         private GameSceneManager currentGameSceneManager;
         private Rules rules;
-        private List<Thing> things,thingsSort;
-        private List<Sprite> panSprite;
-        private List<String> panText;
-        private List<bool> selectThing;
+        private List<Thing> things;
         private bool level1Bool = true;
         private Image loadingBar;
         private Transform activeBar;
         private int sizeThings, rand, score, maxScore, scoreLevel, curSceneNumber, sceneCount, timer;
-        
+        private ScrollScript scrollScript;
+        private SwipeInput swipeScript;
+        private Panel panelImage, panelText;
+
         [SerializeField] private Image room;
         [SerializeField] private Text scoreText;
         [SerializeField] private Button startGameButton;
         [SerializeField] private Text gameTitle;
         [SerializeField] private GameObject timerObj;
         [SerializeField] private Text timerText;
+        [SerializeField] private GameObject gg;
         
 
         private void Awake()
         {
             ApplicationManager.Instance.GameManager = this;
+        }
+
+        private void Start()
+        {
             startGameButton.onClick.AddListener(StartButtonClicked);
             activeBar = timerObj.transform.Find("ActiveBar");
             loadingBar = activeBar.GetComponent<Image>();
-            
-            
+            scrollScript = ApplicationManager.Instance.ScrollScript;
+            swipeScript = ApplicationManager.Instance.SwipeInput;
         }
 
         private void StartButtonClicked()
@@ -65,6 +70,8 @@ namespace Game
         private void StartGame()
         {
             rules = currentGameSceneManager.Rules;
+            panelImage = rules.PanelImage;
+            panelText = rules.PanelText;
             StartCoroutine(ViewRoom());
         }
 
@@ -83,6 +90,7 @@ namespace Game
             timerObj.SetActive(false);
             yield return null;
         }
+        
         private IEnumerator ViewRoom()
         {
             room.sprite = rules.Room;
@@ -96,109 +104,60 @@ namespace Game
         
         private void Load()
         {
-            thingsSort = new List<Thing>(rules.Things);
-            things = new List<Thing>();
-            selectThing = new List<bool>();
-            sizeThings = thingsSort.Count;
-            scoreLevel = 0;
+            scrollScript.InitLists();
+            things = new List<Thing>(rules.Things);
+            things = rules.Things.Shuffle().ToList();
+            sizeThings = things.Count;
             maxScore += sizeThings;
+            scoreLevel = 0;
             
-            if (level1Bool)
-            {
-                LoadPanelImage();
-                level1Bool = false;
-            }
-            else
-            {
-                LoadPanelText();
-                level1Bool = true;
-            }
-            ApplicationManager.Instance.ScrollScript.ActivateScript();
-            ApplicationManager.Instance.SwipeInput.ActivateScript();
+            foreach (var thing in things)
+                scrollScript.InstPanel(level1Bool ? panelImage : panelText, thing);
+
+            level1Bool = !level1Bool;
+            scrollScript.ActivateScript();
+            swipeScript.ActivateScript();
         }
 
-        private void LoadPanelImage()
-        {
-            panSprite = new List<Sprite>();
-            for (int i = 0; i < sizeThings; i++)
-            {
-                rand = Random.Range(0, thingsSort.Count);
-                panSprite.Add(thingsSort[rand].sprite);
-                things.Add(thingsSort[rand]);
-                selectThing.Add(false);
-                thingsSort.RemoveAt(rand);
-            }
-            
-            ApplicationManager.Instance.ScrollScript.PanPrefab = rules.PanelImage;
-            ApplicationManager.Instance.ScrollScript.StartLevel1(panSprite);
-        }
-        
-        private void LoadPanelText()
-        {
-            panText = new List<string>();
-            for (int i = 0; i < sizeThings; i++)
-            {
-                rand = Random.Range(0, thingsSort.Count);
-                panText.Add(thingsSort[rand].thingName);
-                things.Add(thingsSort[rand]);
-                selectThing.Add(false);
-                thingsSort.RemoveAt(rand);
-            }
-            
-            ApplicationManager.Instance.ScrollScript.PanPrefab = rules.PanelText;
-            ApplicationManager.Instance.ScrollScript.StartLevel2(panText);
-        }
 
         public void OnSwipeUp(int selPanID)
         {
-            if (things[selPanID].correct)
-            {
-                ApplicationManager.Instance.ScrollScript.DelPan(selPanID);
-                scoreLevel++;
-                things.RemoveAt(selPanID);
-                selectThing.RemoveAt(selPanID);
-            }
+            if (scrollScript.ScenePanels[selPanID].Thing.correct)
+                TrueSwipe(selPanID);
             else
-            {
-                ApplicationManager.Instance.ScrollScript.DefaultPosPan(selPanID);
-                if (!selectThing[selPanID])
-                {
-                    selectThing[selPanID] = true;
-                    scoreLevel--;
-                }
-            }
-
-            if (things.Count == 0)
-                StartCoroutine(ViewScore());
+                FalseSwipe(selPanID);
         }
         
         public void OnSwipeDown(int selPanID)
         {
-            if (!things[selPanID].correct)
-            {
-                ApplicationManager.Instance.ScrollScript.DelPan(selPanID);
-                scoreLevel++;
-                things.RemoveAt(selPanID);
-                selectThing.RemoveAt(selPanID);
-            }
+            if (!scrollScript.ScenePanels[selPanID].Thing.correct)
+                TrueSwipe(selPanID);
             else
-            {
-                ApplicationManager.Instance.ScrollScript.DefaultPosPan(selPanID);
-                if (!selectThing[selPanID])
-                {
-                    selectThing[selPanID] = true;
-                    scoreLevel--;
-                }
-            }
+                FalseSwipe(selPanID);
+        }
 
-            if (things.Count == 0)
+        private void TrueSwipe(int selPanID)
+        {
+            scrollScript.DelPan(selPanID);
+            scoreLevel++;
+            if (scrollScript.ScenePanels.Count == 0)
                 StartCoroutine(ViewScore());
+        }
+
+        private void FalseSwipe(int selPanID)
+        {
+            scrollScript.DefaultPosPan(selPanID);
+            Debug.Log(scrollScript.ScenePanels[selPanID].Thing.SelBool);
+            if (scrollScript.ScenePanels[selPanID].Thing.SelBool) return;
+            
+            scrollScript.ScenePanels[selPanID].Thing.SelBool = true;
+            scoreLevel--;
         }
 
         private IEnumerator ViewScore()
         {
-            ApplicationManager.Instance.ScrollScript.DeactivateScript();
-            ApplicationManager.Instance.SwipeInput.DeactivateScript();
+            scrollScript.DeactivateScript();
+            swipeScript.DeactivateScript();
             score += scoreLevel;
             if(curSceneNumber < sceneCount || !level1Bool)
                 ScoreText(scoreLevel, sizeThings);

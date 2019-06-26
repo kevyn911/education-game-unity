@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2773483225067503383}
   - component: {fileID: 8247798110292785420}
   m_Layer: 5
-  m_Name: ImageC
+  m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -85,6 +85,7 @@ GameObject:
   - component: {fileID: 8804848717726165587}
   - component: {fileID: 3780900742513301397}
   - component: {fileID: 765041068022437502}
+  - component: {fileID: 8841496986047449623}
   m_Layer: 5
   m_Name: ScrollPan
   m_TagString: Untagged
@@ -149,3 +150,16 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+--- !u!114 &8841496986047449623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4627917507122375935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73d5621913e525c4e8a9e1d955997895, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  image: {fileID: 8247798110292785420}
