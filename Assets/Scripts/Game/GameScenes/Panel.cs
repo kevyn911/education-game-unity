@@ -4,15 +4,9 @@ using Game;
 using Game.GameScenes;
 using UnityEngine;
 
-public class Panel : MonoBehaviour
+public abstract class Panel : MonoBehaviour
 {
-    private Thing thing;
-    
-    public Thing Thing
-    {
-        get => thing;
-        set => thing = value;
-    }
+    public Thing Thing { get; private set; }
 
     public virtual void Show(Thing thing)
     {

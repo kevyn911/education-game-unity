@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Application;
@@ -7,7 +6,6 @@ using Game.GameScenes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 namespace Game
 {
@@ -16,13 +14,12 @@ namespace Game
         private GameSceneManager currentGameSceneManager;
         private Rules rules;
         private List<Thing> things;
-        private bool level1Bool = true;
         private Image loadingBar;
         private Transform activeBar;
         private int sizeThings, rand, score, maxScore, scoreLevel, curSceneNumber, sceneCount, timer;
         private ScrollScript scrollScript;
         private SwipeInput swipeScript;
-        private Panel panelImage, panelText;
+        private Panel panelImage;
 
         [SerializeField] private Image room;
         [SerializeField] private Text scoreText, finishScoreText;
@@ -76,7 +73,7 @@ namespace Game
         {
             rules = currentGameSceneManager.Rules;
             panelImage = rules.PanelImage;
-            panelText = rules.PanelText;
+            //panelText = rules.PanelText;
             StartCoroutine(ViewRoom());
         }
 
@@ -102,12 +99,12 @@ namespace Game
             room.gameObject.SetActive(true);
             StartCoroutine(StartTimer());
             yield return new WaitForSeconds(rules.Timer);
-            Load();
+            LoadPanels();
             room.gameObject.SetActive(false);
             yield return null;
         }
         
-        private void Load()
+        private void LoadPanels()
         {
             scrollScript.InitLists();
             things = new List<Thing>(rules.Things);
@@ -115,11 +112,12 @@ namespace Game
             sizeThings = things.Count;
             maxScore += sizeThings;
             scoreLevel = 0;
-            
-            foreach (var thing in things)
-                scrollScript.InstPanel(level1Bool ? panelImage : panelText, thing);
 
-            level1Bool = !level1Bool;
+            foreach (var thing in things)
+            {
+                scrollScript.InstPanel(panelImage, thing);
+            }
+            
             scrollScript.ActivateScript();
             swipeScript.ActivateScript(); 
             animatorController.SetBool("isStartSwipeHelp", true);
@@ -155,23 +153,18 @@ namespace Game
             scrollScript.DeactivateScript();
             swipeScript.DeactivateScript();
             score += scoreLevel;
-            if(curSceneNumber < sceneCount || !level1Bool)
+            if(curSceneNumber < sceneCount)
                 ScoreText(scoreLevel, sizeThings);
-            else if (level1Bool && curSceneNumber == sceneCount)
+            else if (curSceneNumber == sceneCount)
             {
                 ShowFinishScore(score, maxScore);
                 yield break;
             }
             yield return new WaitForSeconds(3);
             scoreText.gameObject.SetActive(false);
-            if (level1Bool)
-            {
-                SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+            SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
                 LoadScene();
-            }
-            else
-                StartCoroutine(ViewRoom());
-            yield return null;
+                yield return null;
         }
 
         private void ShowFinishScore(int score, int maxScore)

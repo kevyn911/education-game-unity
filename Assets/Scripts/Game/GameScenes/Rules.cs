@@ -15,13 +15,13 @@ namespace Game.GameScenes
         [SerializeField] private Sprite room;
         [SerializeField] private uint timer;
         [SerializeField] private Panel panelImage;
-        [SerializeField] private Panel panelText;
+        //[SerializeField] private Panel panelText;
         [SerializeField] private Thing[] things;
 
         public Sprite Room => room;
         public uint Timer => timer;
         public Panel PanelImage => panelImage;
-        public Panel PanelText => panelText;
+        //public Panel PanelText => panelText;
         public Thing[] Things => things;
     }
     
