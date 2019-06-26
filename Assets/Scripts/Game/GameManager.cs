@@ -25,15 +25,13 @@ namespace Game
         private Panel panelImage, panelText;
 
         [SerializeField] private Image room;
-        [SerializeField] private Text scoreText;
-        [SerializeField] private Button startGameButton;
+        [SerializeField] private Text scoreText, finishScoreText;
+        [SerializeField] private Button startGameButton, restartGameButton;
         [SerializeField] private Text gameTitle;
         [SerializeField] private GameObject timerObj;
         [SerializeField] private Text timerText;
-        [SerializeField] private GameObject gg;
-        [SerializeField] private Animator animatorController;
+        [SerializeField] private Animator animatorController, finishGameAnimator;
         
-
         private void Awake()
         {
             ApplicationManager.Instance.GameManager = this;
@@ -42,6 +40,7 @@ namespace Game
         private void Start()
         {
             startGameButton.onClick.AddListener(StartButtonClicked);
+            restartGameButton.onClick.AddListener(OnRestart);
             activeBar = timerObj.transform.Find("ActiveBar");
             loadingBar = activeBar.GetComponent<Image>();
             scrollScript = ApplicationManager.Instance.ScrollScript;
@@ -60,6 +59,11 @@ namespace Game
             SceneManager.LoadScene(ApplicationManager.Instance.GameScene, LoadSceneMode.Additive);
             sceneCount = ApplicationManager.Instance.SceneCount;
             curSceneNumber = ApplicationManager.Instance.SceneNum;
+        }
+
+        private void OnRestart()
+        {
+            SceneManager.LoadScene("Game");
         }
 
         public void RegisterGameSceneManager(GameSceneManager gameSceneManager)
@@ -121,18 +125,9 @@ namespace Game
             animatorController.SetBool("isStartSwipeHelp", true);
         }
 
-
-        public void OnSwipeUp(int selPanID)
+        public void OnSwipeUpDown(int selPanID, bool swipeUpBool)
         {
-            if (scrollScript.ScenePanels[selPanID].Thing.correct)
-                TrueSwipe(selPanID);
-            else
-                FalseSwipe(selPanID);
-        }
-        
-        public void OnSwipeDown(int selPanID)
-        {
-            if (!scrollScript.ScenePanels[selPanID].Thing.correct)
+            if (scrollScript.ScenePanels[selPanID].Thing.correct == swipeUpBool)
                 TrueSwipe(selPanID);
             else
                 FalseSwipe(selPanID);
@@ -149,7 +144,6 @@ namespace Game
         private void FalseSwipe(int selPanID)
         {
             scrollScript.DefaultPosPan(selPanID);
-            Debug.Log(scrollScript.ScenePanels[selPanID].Thing.SelBool);
             if (scrollScript.ScenePanels[selPanID].Thing.SelBool) return;
             
             scrollScript.ScenePanels[selPanID].Thing.SelBool = true;
@@ -165,7 +159,7 @@ namespace Game
                 ScoreText(scoreLevel, sizeThings);
             else if (level1Bool && curSceneNumber == sceneCount)
             {
-                ScoreText(score, maxScore);
+                ShowFinishScore(score, maxScore);
                 yield break;
             }
             yield return new WaitForSeconds(3);
@@ -180,6 +174,12 @@ namespace Game
             yield return null;
         }
 
+        private void ShowFinishScore(int score, int maxScore)
+        {
+            finishScoreText.text = score + "/" + maxScore;
+            finishGameAnimator.gameObject.SetActive(true);
+            finishGameAnimator.SetBool("isStartFinishPanelAnim", true);
+        }
         private void ScoreText(int score, int maxScore)
         {
             scoreText.text = score + "/" + maxScore;

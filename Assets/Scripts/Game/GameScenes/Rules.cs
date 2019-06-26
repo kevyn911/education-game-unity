@@ -20,11 +20,8 @@ namespace Game.GameScenes
 
         public Sprite Room => room;
         public uint Timer => timer;
-        
         public Panel PanelImage => panelImage;
-
         public Panel PanelText => panelText;
-
         public Thing[] Things => things;
     }
     

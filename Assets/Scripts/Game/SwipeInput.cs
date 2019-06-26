@@ -53,9 +53,9 @@ public class SwipeInput : MonoBehaviour
         else if (Input.GetMouseButtonUp(0))
         {
             if(swipeDelta.y > swipeZone)
-                ApplicationManager.Instance.GameManager.OnSwipeUp(selPanID);
+                ApplicationManager.Instance.GameManager.OnSwipeUpDown(selPanID, true);
             else if (swipeDelta.y < -swipeZone)
-                ApplicationManager.Instance.GameManager.OnSwipeDown(selPanID);
+                ApplicationManager.Instance.GameManager.OnSwipeUpDown(selPanID, false);
             else
                 ApplicationManager.Instance.ScrollScript.OnSwipeUpDown(0f, selPanID);
             startTouch = swipeDelta = Vector2.zero;
