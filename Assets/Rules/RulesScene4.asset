@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b5210a24c4468b4fa419411eaabdf63, type: 3}
+  m_Name: RulesScene4
+  m_EditorClassIdentifier: 
+  room: {fileID: 21300000, guid: c1d246e1f0cdd774a94c5bcda060b15d, type: 3}
+  timer: 6
+  panelImage: {fileID: 8937019694460268338, guid: ac787775ad415ca4e8aeebde70895345,
+    type: 3}
+  things:
+  - thingName: Cup
+    correct: 1
+    sprite: {fileID: 21300000, guid: 057038731fdac8647a0887d36fc94f5d, type: 3}
+  - thingName: Gamepad
+    correct: 1
+    sprite: {fileID: 21300000, guid: 1eaa48b98361a8a4d9ac137b3bc356aa, type: 3}
+  - thingName: Bascket ball
+    correct: 1
+    sprite: {fileID: 21300000, guid: 6deb2b57a89582b49aa4a03cf19fd147, type: 3}
+  - thingName: Luner rover
+    correct: 1
+    sprite: {fileID: 21300000, guid: a53d11b64dc23a84e80291375c0bfc69, type: 3}
+  - thingName: Photo camera
+    correct: 0
+    sprite: {fileID: 21300000, guid: a7239137f3896ef4180871ae937b097c, type: 3}
+  - thingName: Cactus
+    correct: 0
+    sprite: {fileID: 21300000, guid: e6304f0624193d9409f4ace5c4c4ac6c, type: 3}
+  - thingName: Flower in a pot
+    correct: 0
+    sprite: {fileID: 21300000, guid: d1658c0cfbd34424d9ad4e1bbaa93863, type: 3}
+  - thingName: Table lamp
+    correct: 0
+    sprite: {fileID: 21300000, guid: 4a548b1c190f18d4fb1d2dd0c63c7105, type: 3}

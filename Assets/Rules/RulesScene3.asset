@@ -10,13 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2b5210a24c4468b4fa419411eaabdf63, type: 3}
-  m_Name: RulesScene2
+  m_Name: RulesScene3
   m_EditorClassIdentifier: 
   room: {fileID: 21300000, guid: c1d246e1f0cdd774a94c5bcda060b15d, type: 3}
   timer: 6
   panelImage: {fileID: 8841496986047449623, guid: aaabb5210ed075641a638f45594e7050,
-    type: 3}
-  panelText: {fileID: 8937019694460268338, guid: ac787775ad415ca4e8aeebde70895345,
     type: 3}
   things:
   - thingName: Cup
