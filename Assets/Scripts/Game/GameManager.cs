@@ -20,7 +20,8 @@ namespace Game
         private ScrollScript scrollScript;
         private SwipeInput swipeScript;
         private Panel panelImage;
-
+        
+        [SerializeField]private AudioClip correctAnswer, inCorrectAnswer;
         [SerializeField] private Image room;
         [SerializeField] private Text scoreText, finishScoreText;
         [SerializeField] private Button startGameButton, restartGameButton;
@@ -28,6 +29,7 @@ namespace Game
         [SerializeField] private GameObject timerObj;
         [SerializeField] private Text timerText;
         [SerializeField] private Animator animatorController, finishGameAnimator;
+        [SerializeField] private AudioSource soundAnswer;
         
         private void Awake()
         {
@@ -80,6 +82,7 @@ namespace Game
         private IEnumerator StartTimer()
         {
             timer = (int)rules.Timer;
+            loadingBar.fillAmount = 1;
             timerObj.SetActive(true);
             while (0 < timer)
             {
@@ -134,6 +137,8 @@ namespace Game
         private void TrueSwipe(int selPanID)
         {
             scrollScript.DelPan(selPanID);
+            soundAnswer.clip = correctAnswer;
+            soundAnswer.Play();
             scoreLevel++;
             if (scrollScript.ScenePanels.Count == 0)
                 StartCoroutine(ViewScore());
@@ -143,7 +148,10 @@ namespace Game
         {
             scrollScript.DefaultPosPan(selPanID);
             if (scrollScript.ScenePanels[selPanID].Thing.SelBool) return;
-            
+
+            soundAnswer.clip = inCorrectAnswer;
+            soundAnswer.Play();
+            Handheld.Vibrate();
             scrollScript.ScenePanels[selPanID].Thing.SelBool = true;
             scoreLevel--;
         }
