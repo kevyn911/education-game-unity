@@ -28,8 +28,9 @@ namespace Game
         [SerializeField] private Text gameTitle;
         [SerializeField] private GameObject timerObj;
         [SerializeField] private Text timerText;
-        [SerializeField] private Animator animatorController, finishGameAnimator;
+        [SerializeField] private Animator animatorController, finishGameAnimator, animatorSettings;
         [SerializeField] private AudioSource soundAnswer;
+        [SerializeField] private Button settingsBtn, settingsApplyBtn;
         
         private void Awake()
         {
@@ -44,12 +45,26 @@ namespace Game
             loadingBar = activeBar.GetComponent<Image>();
             scrollScript = ApplicationManager.Instance.ScrollScript;
             swipeScript = ApplicationManager.Instance.SwipeInput;
+            settingsBtn.onClick.AddListener(OpenSettings);
+            settingsApplyBtn.onClick.AddListener(ApplySettings);
+        }
+
+        private void ApplySettings()
+        {
+            // Передати який тип буде юзатися
+            animatorSettings.SetTrigger("isSettingsClose");
+        }
+
+        private void OpenSettings()
+        {
+            animatorSettings.SetTrigger("isSettingsOpen");
         }
 
         private void StartButtonClicked()
         {
             LoadScene();
             startGameButton.gameObject.SetActive(false);
+            settingsBtn.gameObject.SetActive(false);
             gameTitle.gameObject.SetActive(false);
         }
 
